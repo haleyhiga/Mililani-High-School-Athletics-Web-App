@@ -32,10 +32,31 @@ class Store:
         return products
     
 
+    def createProduct(self, product_name, product_desc, price, quantity, image):
+        data = [product_name, product_desc, price, quantity, image]
+        #add a new rollercoaster to ur db
+        self.cursor.execute("INSERT INTO store (product_name, product_desc, price, quantity, image) VALUES (?,?,?,?, ?)", data)
+        self.connection.commit() #saves the insert
+        return
+
+
     def getSingleProduct(self,product_id):
         data = [product_id]
-        self.cursor.execute("SELECT * FROM store WHERE id = ?",data)
+        self.cursor.execute("SELECT * FROM store WHERE product_id = ?",data)
         #goes and gets an array 
         product = self.cursor.fetchone()
         return product
     
+
+    def updateProduct(self, product_id, product_name, product_desc, price, quantity, image):
+        data = [product_name, product_desc, price, quantity, image, product_id]
+        self.cursor.execute("UPDATE store SET product_name = ?, product_desc = ?, price = ?, quantity = ?, image = ? WHERE product_id = ?", data)
+        self.connection.commit()
+        return
+    
+    
+    def deleteProduct(self, product_id):
+        data = [product_id]
+        self.cursor.execute("DELETE FROM store WHERE product_id = ?", data)
+        self.connection.commit()
+        return
