@@ -1,9 +1,10 @@
-from flask import Flask, request, g, render_template
+import stripe
+from flask import Flask, request, g, render_template, send_from_directory, url_for
 from store import Store
 
 
-app = Flask(__name__)
-
+#app = Flask(__name__)
+app = Flask(__name__, static_folder="static", template_folder="templates")
 
 @app.before_request
 def before_request_func():
@@ -72,6 +73,7 @@ def delete_product(product_id):
     else:
         return f"Product {product_id} not found", 404, {"Access-Control-Allow-Origin":"*"}
 
+
 @app.route("/products/<int:product_id>")
 def product_details(product_id):
     db = Store("store_db.db")
@@ -81,6 +83,10 @@ def product_details(product_id):
     else:
         return f"Product with ID {product_id} not found", 404
 
+
+@app.route('/client/<path:filename>')
+def serve_static_files(filename):
+    return send_from_directory('../client', filename)
 
 def run():
     app.run(port=8080, host='0.0.0.0')

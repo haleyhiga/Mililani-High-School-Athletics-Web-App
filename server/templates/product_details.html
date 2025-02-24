@@ -4,15 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ product.product_name }}</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../static/style.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=shopping_cart" />
+    
 </head>
+
+
+
+
 <body>
 
     <div class="header">
         <div class="header-container">
-            <img src="MHSLogo.jpg" alt="Mililani High School Logo" class="logo">
+            <img src="{{ url_for('static', filename='MHSLogo.jpg') }}" alt="Mililani High School Logo" class="logo">
             <div class="header-text">
                 <h1>MHS Athletics</h1>
                 <span class="tagline">Excellence. Tradition. Pride.</span>
@@ -22,14 +27,14 @@
     
     <nav class="navbar">
         <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="store.html">Store</a></li>
-            <li><a href="schedules.html">Schedules</a></li>
-            <li><a href="faq.html">FAQs</a></li>
-            <li><a href="forms.html">Forms</a></li>
-            <li><a href="deadlines.html">Deadlines</a></li>
+            <li><a href="{{ url_for('static', filename='index.html') }}">Home</a></li>
+            <li><a href="{{ url_for('static', filename='store.html') }}">Store</a></li>
+            <li><a href="{{ url_for('static', filename='schedules.html') }}">Schedules</a></li>
+            <li><a href="{{ url_for('static', filename='faq.html') }}">FAQs</a></li>
+            <li><a href="{{ url_for('static', filename='forms.html') }}">Forms</a></li>
+            <li><a href="{{ url_for('static', filename='deadlines.html') }}">Deadlines</a></li>
             <li class="cart-icon">
-                <a href="cart.html">
+                <a href="{{ url_for('static', filename='cart.html') }}">
                     <span class="material-symbols-outlined">shopping_cart</span>
                 </a>
             </li>
@@ -37,21 +42,19 @@
     </nav>
 
     <div id="app">
-
         <div class="header">
             <h1>Product Details</h1>
         </div>
         <div class="product-details">
             <h2>{{ product.product_name }}</h2>
-            <img src="{{ product.image }}" alt="{{ product.product_name }}" class="product-image">
+            <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.product_name }}" class="product-image">
             <p>{{ product.product_desc }}</p>
             <p>Price: ${{ product.price }}</p>
             <p>Quantity Available: {{ product.quantity }}</p>
             <button @click="addToCart(product)">Add to Cart</button>
         </div>
-
     </div>
 
-    <script src="app.js"></script>
+    <script src="../static/app.js"></script>
 </body>
 </html>

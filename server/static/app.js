@@ -29,7 +29,6 @@ const app = Vue.createApp({
                 console.log("Response received:", response); // Debug step
                 return response.json();
             })
-            // i set this twice...
             .then(data => {
                 console.log("Fetched products:", data.products); // Debug step
                 this.products = data.products;
@@ -44,36 +43,14 @@ const app = Vue.createApp({
             this.cart = JSON.parse(storedCart);
         }
     },
-    computed: {
-        cartSubtotal() {
-            return this.cart.reduce((total, item) => total + item.price, 0).toFixed(2);
-        },
-        cartItemCount() {
-            return this.cart.length;
-        }
-    },
+    
 
     methods: {
-        // addToCart(product) {
-        //     this.cart.push(product);
-        //     localStorage.setItem("cart", JSON.stringify(this.cart));
-        //     alert(`${product.name} added to cart`);
-        // },
         addToCart(product) {
-            const cartItem = {
-                id: product.product_id, 
-                product_name: product.product_name, 
-                product_desc: product.product_desc, 
-                price: product.price, 
-                image: product.image 
-            };
-        
-            this.cart.push(cartItem);
+            this.cart.push(product);
             localStorage.setItem("cart", JSON.stringify(this.cart));
-            alert(`${product.product_name} added to cart`);
+            alert(`${product.name} added to cart`);
         },
-        
-// insert a remove from cart function here
 
         // Create a new product
         createProduct() {
@@ -114,18 +91,7 @@ const app = Vue.createApp({
                 };
                 this.showEditModal = true; // Show the modal
             },
-            removeFromCart(productId) {
-                // Find the index of the item with the matching id
-                const index = this.cart.findIndex(item => item.id === productId);
-                
-                if (index !== -1) {
-                    // Remove the item from the cart array
-                    this.cart.splice(index, 1);
-        
-                    // Update localStorage
-                    localStorage.setItem("cart", JSON.stringify(this.cart));
-                }
-            },
+            
         
             // Update the product in the database
             updateProduct() {
@@ -152,9 +118,6 @@ const app = Vue.createApp({
                 .catch(error => {
                     console.error("Error updating product:", error);
                 });
-            },
-            checkout() {
-// implement proceed to checkout button here for payment
             },
 
             deleteProduct(product) {

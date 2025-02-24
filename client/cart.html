@@ -37,17 +37,20 @@
     </nav>
 
     <div id="app">
-        <h1>Shopping Cart</h1>
+        <h1>My Cart({{ cartItemCount }})</h1>
+        <h2>Subtotal: ${{ cartSubtotal }}</h2>
         <ul>
             <li v-for="item in cart" class="cart-item">
                 <img :src="item.image" alt="Product Image" class="cart-image">
                 <div class="cart-details">
-                    <h3>{{ item.name }}</h3>
+                    <h3>{{ item.product_name }}</h3>
                     <p>${{ item.price }}</p>
-                    <p>{{ item.description }}</p>
+                    <p>{{ item.product_desc }}</p>
+                    
                 </div>
                 <button @click="removeFromCart(item.id)">Remove</button>
             </li>
+            <button @click="checkout">Proceed to Checkout</button>
         </ul>
         <p v-if="cart.length === 0">Your cart is empty.</p>
     </div>
