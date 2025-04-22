@@ -584,69 +584,78 @@ span.tagline {
 }
 
 
-.sliderContainer {
-    position: relative;
-    width: 100%;
-    max-width: 1530px;
-    height: 600px;
 
+  
+
+  
+
+.swiper {
+    width: 100%;
+    /* max-width: 1200px; */
+    height: 700px;
+    /* margin: 2rem auto; */
+  
     overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
 
+  .swiper-fade .swiper-slide {
+    transition-property: opacity;
   }
   
-  .sliderContainer img:first-child {
-    position: relative;
-    width: 100%;
-    left: 0%;
-    top: 0;
-    padding: 0;
+  .swiper-fade .swiper-slide,
+  .swiper-fade .swiper-slide-active {
+    opacity: 0;
   }
   
-  .sliderContainer img {
-    position: absolute;
+  .swiper-fade .swiper-slide-active {
+    opacity: 1;
+    z-index: 2;
+  }
+  
+  
+  .swiper-slide img {
     width: 100%;
-    height: 600px;
+    height: 100%;
     object-fit: cover;
-    left: -100%;
-    top: 0;
-    padding: 0;
-    transition: left 1s ease;
   }
   
-  .nextCircle, .prevCircle {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    opacity: 0.5;
-    background-color: black;
-    z-index: 19;
-    cursor: pointer;
-  }
-  
-  .nextCircle {
-    right: 20px;
-  }
-  
-  .prevCircle {
-    left: 20px;
-  }
-  
-  .next, .previous {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  .swiper-button-next,
+  .swiper-button-prev {
     color: white;
-    font-size: 30px;
-    z-index: 20;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 12px;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+    outline: none; 
   }
   
-  .nextCircle:hover, .prevCircle:hover {
-    opacity: 0.8;
+
+  .swiper-button-next:focus,
+  .swiper-button-prev:focus {
+    outline: none;
+    box-shadow: none;
   }
+  
+  
+  .swiper-pagination-bullet {
+    background: #FFC72C;
+    opacity: 1;
+  }
+  
+  .swiper-pagination-bullet-active {
+    background: #D4A017;
+  }
+
+
+
+  
+
+
+  
+
+  
+
 
   .cover-image {
     width: 1530px;

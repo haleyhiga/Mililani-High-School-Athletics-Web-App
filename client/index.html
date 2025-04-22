@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MHS Athletics</title>
     <link rel="icon" type="image/x-icon" href="mhsfavicon.png">
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=shopping_cart" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="style.css">
+
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -59,21 +61,27 @@
     </nav>
 
     <div class="main-content">
-        <div class="sliderContainer">
-            <img src="gamepic1.jpg" alt="Game 1">
-            <img src="gamepic2.jpg" alt="Game 2">
-            <img src="gamepic3.jpg" alt="Game 3">
-          
-            <div class="nextCircle">
-              <i class="fa fa-arrow-right next" aria-hidden="true"></i>
-            </div>
-            <div class="prevCircle">
-              <i class="fa fa-arrow-left previous" aria-hidden="true"></i>
-            </div>
-          </div>
-          
-          </div>
-          
+       
+    
+    <!-- Swiper for slider -->
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="gamepic1.jpg" /></div>
+        <div class="swiper-slide"><img src="gamepic2.jpg" /></div>
+        <div class="swiper-slide"><img src="gamepic3.jpg" /></div>
+  
+        </div>
+    
+
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    
+
+        <div class="swiper-pagination"></div>
+    </div>
+    
+
+
           
           </div>
           
@@ -95,8 +103,33 @@
 </div>
 
 <script src="app.js"></script>
-<script src="slider.js"></script>
 
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <script>
+    const swiper = new Swiper('.mySwiper', {
+      loop: true,
+      effect: 'fade', 
+      autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+      },
+      fadeEffect: {
+        crossFade: true, 
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
+  </script>
+  
+  
+  
 </body>
 </html>
 
