@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 def dict_factory(cursor, row):
     fields = []
@@ -54,9 +55,34 @@ class Store:
         self.connection.commit()
         return
     
-    
+
     def deleteProduct(self, product_id):
         data = [product_id]
         self.cursor.execute("DELETE FROM store WHERE product_id = ?", data)
         self.connection.commit()
         return
+
+
+    # FOR ORDERS
+    def createOrder(self, email, timestamp):
+        timestamp = datetime.now().isoformat()
+        self.cursor.execute("INSERT INTO orders (email, total, created_at) VALUES (?, ?, ?)", [email, 0.0, timestamp])
+        self.connection.commit()
+        return self.cursor.lastrowid
+
+    def addOrderItem(self, order_id, product_id, quantity):
+        self.cursor.execute("INSERT INTO order_items (order_id, product_id, quantity) VALUES (?, ?, ?)", [order_id, product_id, quantity])
+        self.connection.commit()
+
+    def getOrderItems(self, order_id):
+        self.cursor.execute("""
+            SELECT p.product_name, p.price, oi.quantity
+            FROM order_items oi
+            JOIN store p ON oi.product_id = p.product_id
+            WHERE oi.order_id = ?
+        """, [order_id])
+        return self.cursor.fetchall()
+
+    def updateOrderTotal(self, order_id, total):
+        self.cursor.execute("UPDATE orders SET total = ? WHERE order_id = ?", [total, order_id])
+        self.connection.commit()

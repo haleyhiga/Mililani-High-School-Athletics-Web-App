@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - MHS Athletics</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="mhsfavicon.png">
+</head>
+<body>
+
+    <div class="success-container">
+        <h1>Thank You for Your Purchase!</h1>
+        <p>Your payment was successful. Below is your order summary:</p>
+
+        <div id="order-summary">
+            <h2>Order Details</h2>
+            <ul id="order-items">
+                <!-- Order items will be added dynamically -->
+            </ul>
+            <p><strong>Total:</strong> $<span id="order-total"></span></p>
+            <p><strong>Transaction ID:</strong> <span id="transaction-id"></span></p>
+        </div>
+
+        <div class="actions">
+            <a href="store.html" class="btn">Continue Shopping</a>
+            <a href="index.html" class="btn">Return Home</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const order = JSON.parse(localStorage.getItem("orderDetails")); // Retrieve stored order details
+            if (order) {
+                document.getElementById("transaction-id").textContent = order.transactionId || "N/A";
+                document.getElementById("order-total").textContent = order.total || "0.00";
+
+                const orderItemsList = document.getElementById("order-items");
+                order.items.forEach(item => {
+                    const li = document.createElement("li");
+                    li.innerHTML = `<strong>${item.product_name}</strong> - $${item.price} (x${item.quantity})`;
+                    orderItemsList.appendChild(li);
+                });
+
+                // Clear cart & order details after displaying
+                localStorage.removeItem("cart");
+                localStorage.removeItem("orderDetails");
+            } else {
+                document.getElementById("order-summary").innerHTML = "<p>No order details found.</p>";
+            }
+        });
+    </script>
+
+</body>
+</html>

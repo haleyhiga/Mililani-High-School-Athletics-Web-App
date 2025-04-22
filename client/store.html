@@ -4,22 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MHS Athletics</title>
+    <link rel="icon" type="image/x-icon" href="mhsfavicon.png">
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=shopping_cart" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
     <div class="header">
-        <div class="header-container">
-            <img src="MHSLogo.jpg" alt="Mililani High School Logo" class="logo">
-            <div class="header-text">
-                <h1>MHS Athletics</h1>
-                <span class="tagline">Excellence. Tradition. Pride.</span>
+        <div class="banner-wrapper">
+            <div class="angled-logo-section">
+                <div class="angled-bg">
+                    <a href="index.html">
+                      <img src="MHSLogo.jpg" alt="Mililani High School Logo" class="banner-logo">
+                    </a>
+                  </div>
             </div>
+            <div class="banner-text-section">
+              <h1>MILILANI HIGH SCHOOL ATHLETICS</h1>
+              <span class="tagline">Excellence. Tradition. Pride.</span>
+            </div>
+          </div>
+          
         </div>
+        
     </div>
+
     
+    <div id="app">
+            
     <nav class="navbar">
         <ul>
             <li><a href="index.html">Home</a></li>
@@ -27,20 +42,45 @@
             <li><a href="schedules.html">Schedules</a></li>
             <li><a href="faq.html">FAQs</a></li>
             <li><a href="forms.html">Forms</a></li>
-            <li><a href="deadlines.html">Deadlines</a></li>
+            <li><a href="https://gofan.co/app/school/HI17615">Tickets</a></li>
+              
             <li class="cart-icon">
                 <a href="cart.html">
                     <span class="material-symbols-outlined">shopping_cart</span>
                 </a>
             </li>
+      
+            <li v-if="isAdmin">
+                <button @click="logout">Logout</button>
+            </li>
         </ul>
     </nav>
+    <div class="cover-image-wrapper">
+        <div class="cover-image"></div>
+        <div class="cover-text">
+            <div class="split-text-container">
+                <span class="text-part left">GEAR</span>
+                <span class="text-part right">SHOP</span>
+              </div>
+              
+            <button class="shop-now-btn" onclick="scrollToStore()">Shop Now</button>
+          </div>
+          
+      </div>
+      
 
-    <div id="app">
+      <div id="store-section" class="store-header">
         <h1> Athletics Store </h1>
+      </div>
+      
     
-        <!-- Button to trigger modal -->
-        <button @click="showCreateModal = true">Create Product</button>
+      <button 
+      v-if="isAdmin" 
+      @click="showCreateModal = true" 
+      class="create-product-btn">
+      Create Product
+    </button>
+    
     
         <!-- Create Product Modal -->
         <div v-if="showCreateModal" class="modal">
@@ -55,33 +95,35 @@
                 <label>Quantity:</label>
                 <input type="number" v-model="newProduct.quantity">
                 <label>Image URL:</label>
-                <input type="text" v-model="newProduct.image"> <!-- New input for image URL -->
+                <input type="text" v-model="newProduct.image">
                 <button @click="createProduct">Create</button>
                 <button @click="showCreateModal = false">Cancel</button>
             </div>
         </div>
-
-        <!-- Edit Product Modal -->
+  
         <div v-if="showEditModal" class="modal">
             <div class="modal-content">
                 <h2>Edit Product</h2>
                 <label>Product Name:</label>
                 <input type="text" v-model="editProduct.name">
+                
                 <label>Description:</label>
                 <input type="text" v-model="editProduct.description">
+                
                 <label>Price:</label>
                 <input type="number" step="0.01" v-model="editProduct.price">
+                
                 <label>Quantity:</label>
                 <input type="number" v-model="editProduct.quantity">
+                
                 <label>Image URL:</label>
                 <input type="text" v-model="editProduct.image">
+                
                 <button @click="updateProduct">Update</button>
                 <button @click="showEditModal = false">Cancel</button>
             </div>
         </div>
 
-
-        
     
         <!-- Product List -->
         <div v-if="products.length" class="product-container">
@@ -94,30 +136,58 @@
             >
                 <img :src="product.image" alt="Product Image" class="product-image">
                 <h2>{{ product.product_name }}</h2>
-                <p>{{ product.product_desc }}</p>
+           
                 <p>${{ product.price }}</p>
                 
-                <!-- Fixing the buttons to stop event propagation -->
-                <button @click.stop="addToCart(product)">Add to Cart</button>
-                <button @click.stop="openEditModal(product)">Edit Product</button>
-                <button @click.stop="deleteProduct(product)">Delete Product</button>
+                <button
+                    v-if="!isAdmin" 
+                    @click.stop="addToCart(product)">
+                    Add to Cart
+                </button>
+
+                
+                <div v-if="isAdmin">
+                    <button @click.stop="openEditModal(product)">Edit Product</button>
+                    <button @click.stop="deleteProduct(product)">Delete Product</button>
+                </div>
             </div>
         </div>
-        
-        
-        
-        
-        
-        
+    
         <div v-else>
             <p>No products available.</p>
         </div>
     </div>
     
-    
+    <footer>
+        <a href="https://www.instagram.com/mhstrojans.athletics/" target="_blank">FOLLOW OUR INSTAGRAM
+            
+            <i class="fa-brands fa-instagram" style="font-size: 20px;"></i>
+          </a>
+          
 
+        <p>Contact Us: (808) 307-4200 | 95-1200 Meheula Parkway, Mililani, HI 96789 | Fax: (808) 627-7375</p>
+
+        <div></div>
+        <a href="admin_login.html">Admin Portal <i class="fa-solid fa-lock" style="font-size: 20px;"></i></a>
+    </footer>
+    
+    
+    <div class="admin-only" style="display: none;">
+        <button onclick="openCreateProductModal()">Add New Product</button>
     </div>
 
+
+
+
+    
     <script src="app.js"></script>
+    <script>
+        function scrollToStore() {
+          document.getElementById("store-section").scrollIntoView({
+            behavior: "smooth"
+          });
+        }
+      </script>
+      
 </body>
 </html>

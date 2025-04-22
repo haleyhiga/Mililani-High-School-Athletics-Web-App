@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Mililani High School</title>
+    <link rel="icon" type="image/x-icon" href="mhsfavicon.png">
+    <link rel="stylesheet" href="style.css"> 
+    
+</head>
+<body>
+
+    <div class="login-container">
+        <img src="MHSLogo.jpg" alt="Mililani High School Logo" class="logo">
+        <h1>Admin Portal</h1>
+
+        <form id="adminLoginForm">
+            <label for="username">Username / Email</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            
+            <button type="submit">Sign In</button>
+            <p>New Admin? <a href="create_admin.html">Create an Account</a></p>
+
+        </form>
+
+        <p class="error-message" id="errorMessage"></p>
+    </div>
+
+    <script>
+        document.getElementById("adminLoginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            let formData = new FormData(this);
+            
+            fetch("http://localhost:8080/sessions/auth", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Invalid login credentials");
+                }
+            })
+            .then(data => {
+              
+                localStorage.setItem("admin_session_id", data.session_id);
+                window.location.href = "store.html";
+            })
+            .catch(error => {
+                document.getElementById("errorMessage").textContent = error.message;
+            });
+        });
+    </script>
+
+</body>
+</html>

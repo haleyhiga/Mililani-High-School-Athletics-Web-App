@@ -1,0 +1,105 @@
+
+.faq-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+  
+
+
+.faq-header{
+    display: block; 
+    font-family: 'Oswald', 'Bebas Neue', 'Impact', sans-serif;
+    line-height: 35.2px;
+    font-size: 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #4B2E2E;
+    font-style: italic;
+    text-size-adjust: 100%;
+  
+    text-align: center;  
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+.faq-header::after {
+    content: '';
+    display: block;
+    width: 80px;
+    margin: 0.5rem auto 0;
+    border-bottom: 4px solid #D4A017;
+  }
+  
+
+  .header p {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #444;
+    margin-bottom: 2rem;
+  }
+  
+
+  details {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  summary {
+    font-weight: 600;
+    font-size: 1.05rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  
+  details[open] summary {
+    color: #8c1515;
+  }
+  
+  details p {
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #333;
+    animation: fadeIn 0.3s ease-in;
+  }
+  
+
+  .icon {
+    font-size: 1.3rem;
+    transition: transform 0.3s ease;
+    color: #8c1515;
+  }
+  
+  details[open] .icon {
+    transform: rotate(180deg);
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .faq-header-wrapper {
+    background-color: #f5f5f5;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+}
