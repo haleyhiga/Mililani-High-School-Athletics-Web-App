@@ -1,8 +1,17 @@
 Mililani High School Athletics Web Application
 ----------------------------------------------
 
-# How To Run Locally
-Requires Python 3.9+, 'pip', SQLite, Flask, Flask-mail, Passlib, and Stripe.
+
+**Requirements:**
+- Python 3.9+
+- pip
+- SQLite
+- Flask
+- Flask-Mail
+- Passlib (bcrypt)
+- Stripe
+
+## How To Run Locally
 In order to collect payments, go to stripe.com and create an account.  Once the account is created, you will need to use the Stripe secret key in server.py.  You will also need the publishable key, and use that in payment.js.  For email confirmations, you will need to create a gmail account, set up app passwords, and use that for the MAIL_USERNAME and MAIL_PASSWORD in server.py.
 
 1. Clone this repo: https://github.com/haleyhiga/MHS-Athletics-Web-App
@@ -24,26 +33,23 @@ In order to collect payments, go to stripe.com and create an account.  Once the 
 # Technical Overview
 
 # Frontend Stack:
-- HTML
-- CSS
-- Javascript
-- Vue.js 3 (CDN)
-- LocalStorage
-- SwiperJS
+- HTML / CSS / Javascript
+- Vue.js 3 (via CDN)
+- LocalStorage for cart persistance
+- SwiperJS for homepage slider
 
 
 # Backend Stack:
-- Python
-- Flask
-- StripeJS
-- Flask-Mail
-- Passlib bcrypt
+- Python + Flask
+- Stripe Python SDK
+- Flask-Mail for email confirmations
+- Passlib bcrypt for admin authentication
 - Custom session class (using Bearer tokens)
-- SQLite
+- SQLite for product, order, and admin data
 
 
 # Security:
-- CORS Headers
-- Content Security Policies
-- Authentication checks from Flask
-- All sensitive information stored in environment variables
+- CORS headers
+- Content Security Policies (CSP)
+- Authorization checks for admin endpoints
+- Environment variables for all credentials
