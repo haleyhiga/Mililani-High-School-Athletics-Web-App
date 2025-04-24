@@ -15,14 +15,13 @@ app = Flask(__name__, template_folder="templates", static_folder="../client")
 session_store = SessionStore()
 
 # MAIL SECTION FOR ORDER CONFIRMATIONS
-
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
 app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_DEFAULT_SENDER'] = app.config['MAIL_USERNAME']
 
 
 
@@ -219,7 +218,7 @@ def is_admin_logged_in():
 @app.route("/submit-order", methods=["POST"])
 def submit_order():
     data = request.get_json()
-    cart = data["cart"]  # [{'id': 1, 'quantity': 2}, ...]
+    cart = data["cart"]  # [{'id': 1, 'quantity': 2}, etc]
 
     email = data["email"]
     first = data.get("first_name", "")
@@ -351,7 +350,6 @@ def send_order_email(to_email, order_id):
 # PAYMENT SECTION
 # my secret key
 stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
-
 
 @app.route("/create-payment-intent", methods=["POST"])
 def create_payment_intent():

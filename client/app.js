@@ -3,15 +3,21 @@ const app = Vue.createApp({
         return {
             products: [],
             cart: [],
+
+            // for admin functionality
             isAdmin: false, 
             showCreateModal: false,
             showEditModal: false,
+
+            // properties of products stored in db
+            // fields for creating a new product
             newProduct: {
                 name: '',
                 description: '',
                 price: 0,
                 quantity: 0
             },
+            // fields for editing products that already exist
             editProduct: {
                 id: null,
                 name: '',
@@ -24,16 +30,18 @@ const app = Vue.createApp({
     },
 
     created() {
-        console.log("Vue instance created. Fetching products...");
-        this.fetchProducts();
-        this.checkAdminSession(); 
-    
+        console.log("Getting products");
+        this.fetchProducts(); // load the products from backend
+        this.checkAdminSession(); // used to check if the admin is logged in
+        // load the cart from localstorage if exists
         const storedCart = localStorage.getItem("cart");
+        
         if (storedCart) {
             this.cart = JSON.parse(storedCart);
         }
     },
-    
+
+    // used for real-time data updates such as the cart length, subtotal
     computed: {
         cartItemCount() {
             return this.cart.length; 
@@ -43,6 +51,7 @@ const app = Vue.createApp({
         }
     },
     methods: {
+        // get all the products from the backend
         fetchProducts() {
             fetch("http://localhost:8080/products")
                 .then(response => response.json())
@@ -54,12 +63,13 @@ const app = Vue.createApp({
         },
    
 
-
+        // redirect the user to the product detail page
         navigateToProductDetails(productId) {
             window.location.href = `http://localhost:8080/products/${productId}`;
         },
+        // checkout process
         checkout() {
-            const totalAmount = this.cart.reduce((total, item) => total + parseFloat(item.price), 0) * 100; // Convert to cents
+            const totalAmount = this.cart.reduce((total, item) => total + parseFloat(item.price), 0) * 100; // convert to cents
     
             fetch("http://localhost:8080/create-payment-intent", {
                 method: "POST",
@@ -71,9 +81,9 @@ const app = Vue.createApp({
             .then(response => response.json())
             .then(data => {
                 if (data.clientSecret) {
-                    // Save the cart before payment
+                    // save the cart before payment
                     localStorage.setItem("cart", JSON.stringify(this.cart)); 
-                    window.location.href = "checkout.html"; // Redirect to checkout page
+                    window.location.href = "checkout.html"; // redirect to checkout page
                 } else { 
                     alert("Payment error. Try again.");
                 }
@@ -81,6 +91,7 @@ const app = Vue.createApp({
             .catch(error => console.error("Error creating payment intent:", error));
         },
     
+        // checks if the admin session exists from bearer token
         checkAdminSession() {
             fetch("http://localhost:8080/sessions/admins", {
                 method: "GET",
@@ -104,7 +115,7 @@ const app = Vue.createApp({
         },
         
         
-
+        // add product to cart
         addToCart(product) {
             const cartItem = {
                 id: product.product_id, 
@@ -121,6 +132,7 @@ const app = Vue.createApp({
             alert(`${product.product_name} added to cart`);
         },
 
+        // create a new product (ONLY IF ADMIN)
         createProduct() {
             const formData = new FormData();
             formData.append("product_name", this.newProduct.name);
@@ -149,6 +161,7 @@ const app = Vue.createApp({
             .catch(error => console.error("Error creating product:", error));
         },
 
+        // delete a product (ONLY IF ADMIN)
         deleteProduct(product) {
             if (!this.isAdmin) return;
             if (confirm(`Are you sure you want to delete "${product.product_name}"?`)) {
@@ -169,6 +182,7 @@ const app = Vue.createApp({
                 .catch(error => console.error("Error deleting product:", error));
             }
         },
+        // logout admin
         logout() {
             console.log("clicked logout button");
             fetch("http://localhost:8080/sessions/logout", {
@@ -195,7 +209,7 @@ const app = Vue.createApp({
             });
         },
         
-        
+        // open modal & populate the data for editing a product
         openEditModal(product) {
             console.log("Opening edit modal for:", product); 
             this.editProduct = { 
@@ -213,48 +227,49 @@ const app = Vue.createApp({
             });
         },
 
+        // remove product from cart
         removeFromCart(productId) {
-            // Find index of the product in the cart
+            // find index of the product in the cart
             const index = this.cart.findIndex(item => item.id === productId);
             
             if (index !== -1) {
-                // Remove item
+                // remove item
                 this.cart.splice(index, 1);
                 
-                // Update localStorage after removing the item
+                // update localStorage after removing the item
                 localStorage.setItem("cart", JSON.stringify(this.cart));
     
                 alert("Item removed from cart!");
             }
         },
         
-
-            updateProduct() {
-                const formData = new FormData();
-                formData.append("product_name", this.editProduct.name);
-                formData.append("product_desc", this.editProduct.description);
-                formData.append("price", this.editProduct.price);
-                formData.append("quantity", this.editProduct.quantity);
-                formData.append("image", this.editProduct.image);
-        
-                fetch(`http://localhost:8080/products/${this.editProduct.id}`, {
-                    method: "PUT",
-                    body: formData,
-                    headers: {
-                        "Authorization": "Bearer " + localStorage.getItem("admin_session_id")
-                    }
-                })
-                .then(response => {
-                    if (response.status === 200) {
-                        alert("Product updated successfully!");
-                        this.fetchProducts(); 
-                        this.showEditModal = false; 
-                    } else {
-                        alert("Error updating product");
-                    }
-                })
-                .catch(error => console.error("Error updating product:", error));
-            }
+        // update existing product
+        updateProduct() {
+            const formData = new FormData();
+            formData.append("product_name", this.editProduct.name);
+            formData.append("product_desc", this.editProduct.description);
+            formData.append("price", this.editProduct.price);
+            formData.append("quantity", this.editProduct.quantity);
+            formData.append("image", this.editProduct.image);
+    
+            fetch(`http://localhost:8080/products/${this.editProduct.id}`, {
+                method: "PUT",
+                body: formData,
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("admin_session_id")
+                }
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    alert("Product updated successfully!");
+                    this.fetchProducts(); 
+                    this.showEditModal = false; 
+                } else {
+                    alert("Error updating product");
+                }
+            })
+            .catch(error => console.error("Error updating product:", error));
+        }
         
         
     }

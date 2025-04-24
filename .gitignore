@@ -160,6 +160,11 @@ cython_debug/
 **/.DS_Store
 **/._.DS_Store
 
+# Ignore SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
